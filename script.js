@@ -15,18 +15,90 @@ const craftedItems = {
     'Tear of the Goddess': { 'B.F. Sword': 'Spear of Shojin', 'Chain Vest': 'Protector’s Vow', 'Giant\'s Belt': 'Redemption', 'Needlessly Large Rod': 'Archangel’s Staff', 'Negatron Cloak': 'Adaptive Helm', 'Recurve Bow': 'Statikk Shiv', 'Sparring Gloves': 'Hand of Justice', 'Spatula': 'Mythic Emblem', 'Tear of the Goddess': 'Blue Buff' }
 };
 
+// Adding reverse combinations
+for (let baseItem in craftedItems) {
+    for (let combination in craftedItems[baseItem]) {
+        if (!craftedItems[combination]) {
+            craftedItems[combination] = {};
+        }
+        craftedItems[combination][baseItem] = craftedItems[baseItem][combination];
+    }
+}
+
+// Sanitize function to remove special characters for file mapping
+function sanitize(str) {
+    return str.replace(/[^a-zA-Z0-9]/g, '');
+}
+
+const imageMapping = {
+    'BFSword': 'BFSword.png',
+    'ChainVest': 'ChainVest.png',
+    'GiantsBelt': 'GiantsBelt.png',
+    'NeedlesslyLargeRod': 'NeedlesslyLargeRod.png',
+    'NegatronCloak': 'NegatronCloak.png',
+    'RecurveBow': 'RecurveBow.png',
+    'SparringGloves': 'SparringGloves.png',
+    'Spatula': 'Spatula.png',
+    'TearoftheGoddess': 'TearoftheGoddess.png',
+    'Deathblade': 'Deathblade.png',
+    'EdgeofNight': 'EdgeofNight.png',
+    'SteraksGage': 'SteraksGage.png',
+    'HextechGunblade': 'HextechGunblade.png',
+    'Bloodthirster': 'Bloodthirster.png',
+    'GiantSlayer': 'GiantSlayer.png',
+    'InfinityEdge': 'InfinityEdge.png',
+    'GhostlyEmblem': 'GhostlyEmblem.png',
+    'SpearofShojin': 'SpearofShojin.png',
+    'BrambleVest': 'BrambleVest.png',
+    'SunfireCape': 'SunfireCape.png',
+    'Crownguard': 'Crownguard.png',
+    'GargoyleStoneplate': 'GargoyleStoneplate.png',
+    'TitansResolve': 'TitansResolve.png',
+    'SteadfastHeart': 'SteadfastHeart.png',
+    'StoryweaverEmblem': 'StoryweaverEmblem.png',
+    'ProtectorsVow': 'ProtectorsVow.png',
+    'WarmogsArmor': 'WarmogsArmor.png',
+    'Morellonomicon': 'Morellonomicon.png',
+    'Evenshroud': 'Evenshroud.png',
+    'NashorsTooth': 'NashorsTooth.png',
+    'Guardbreaker': 'Guardbreaker.png',
+    'DryadEmblem': 'DryadEmblem.png',
+    'Redemption': 'Redemption.png',
+    'RabadonsDeathcap': 'RabadonsDeathcap.png',
+    'IonicSpark': 'IonicSpark.png',
+    'GuinsoosRageblade': 'GuinsoosRageblade.png',
+    'JeweledGauntlet': 'JeweledGauntlet.png',
+    'FatedEmblem': 'FatedEmblem.png',
+    'ArchangelsStaff': 'ArchangelsStaff.png',
+    'DragonsClaw': 'DragonsClaw.png',
+    'RunaansHurricane': 'RunaansHurricane.png',
+    'Quicksilver': 'Quicksilver.png',
+    'HeavenlyEmblem': 'HeavenlyEmblem.png',
+    'AdaptiveHelm': 'AdaptiveHelm.png',
+    'RedBuff': 'RedBuff.png',
+    'LastWhisper': 'LastWhisper.png',
+    'PorcelainEmblem': 'PorcelainEmblem.png',
+    'StatikkShiv': 'StatikkShiv.png',
+    'ThiefsGloves': 'ThiefsGloves.png',
+    'UmbralEmblem': 'UmbralEmblem.png',
+    'HandofJustice': 'HandofJustice.png',
+    'TacticiansCrown': 'TacticiansCrown.png',
+    'MythicEmblem': 'MythicEmblem.png',
+    'BlueBuff': 'BlueBuff.png'
+};
 
 let currentQuestion;
 let score = 0;
 let wrongAnswers = 0;
 let lives = 3;
-let timer = 30;
+let timer = 30;  // Update the timer to 30 seconds
 let interval;
 let gameStarted = false;
 
 function startGame() {
     document.getElementById('game-over').style.display = 'none';
-    document.getElementById('question-container').style.display = 'block';
+    document.getElementById('question-container').style.display = 'flex';
+    document.getElementById('options-container').style.display = 'flex';
     document.getElementById('timer').textContent = `Time: ${timer}`;
     updateLivesDisplay();
     updateScoreDisplay();
@@ -65,14 +137,20 @@ function shuffle(array) {
 
 function displayQuestion() {
     const question = currentQuestion;
-    document.getElementById('question').textContent = `${question.base} + ? = ${question.item}`;
+    document.getElementById('question').innerHTML = `
+        <img src="img/${imageMapping[sanitize(question.base)]}" alt="${question.base}" title="${question.base}">
+        <img src="img/plus.png" alt="Plus" title="Plus">
+        <img src="img/question.png" alt="Question Mark" id="question-mark">
+        <img src="img/equal.png" alt="Equal" title="Equal">
+        <img src="img/${imageMapping[sanitize(question.item)]}" alt="${question.item}" title="${question.item}">
+    `;
     
     const optionsContainer = document.getElementById('options');
     optionsContainer.innerHTML = '';
     question.options.forEach(option => {
         const optionElement = document.createElement('div');
         optionElement.classList.add('option');
-        optionElement.textContent = option;
+        optionElement.innerHTML = `<img src="img/${imageMapping[sanitize(option)]}" alt="${option}"><span class="tooltip">${option}</span>`;
         optionElement.onclick = () => checkAnswer(option);
         optionsContainer.appendChild(optionElement);
     });
@@ -125,6 +203,7 @@ function updateTimer() {
 function endGame() {
     clearInterval(interval);
     document.getElementById('question-container').style.display = 'none';
+    document.getElementById('options-container').style.display = 'none';
     document.getElementById('game-over').style.display = 'block';
     document.getElementById('final-score').textContent = `Your score is: ${score}`;
 }
@@ -133,7 +212,7 @@ function resetGame() {
     score = 0;
     wrongAnswers = 0;
     lives = 3;
-    timer = 30;
+    timer = 30;  // Reset the timer to 30 seconds
     gameStarted = false;
     startGame();
 }

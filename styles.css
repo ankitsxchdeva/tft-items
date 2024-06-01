@@ -23,27 +23,62 @@ body {
 
 #question-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
+    margin-bottom: 20px;
 }
 
-#options {
+#question img {
+    width: 60px;
+    height: 60px;
+    margin: 0 10px;
+}
+
+#options-container {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #ccc;
+    flex-wrap: wrap; /* Ensure items wrap properly */
 }
 
 .option {
     width: 60px;
     height: 60px;
+    cursor: pointer;
+    position: relative;
+    margin: 5px; /* Add margin to space out options */
+}
+
+.option img {
+    width: 100%;
+    height: 100%;
     border: 2px solid #ccc;
     border-radius: 8px;
-    cursor: pointer;
     transition: transform 0.1s;
 }
 
-.option:hover {
+.option:hover img {
     transform: scale(1.1);
+}
+
+.option:hover .tooltip {
+    display: block;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 12px;
 }
 
 #game-over {
