@@ -41,7 +41,12 @@ body {
     margin-top: 20px;
     padding-top: 20px;
     border-top: 2px solid #ccc;
-    flex-wrap: wrap; /* Ensure items wrap properly */
+}
+
+#options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap; /* Ensure items do not wrap to the next line */
 }
 
 .option {
@@ -49,7 +54,6 @@ body {
     height: 60px;
     cursor: pointer;
     position: relative;
-    margin: 5px; /* Add margin to space out options */
 }
 
 .option img {

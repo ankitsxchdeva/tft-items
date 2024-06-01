@@ -15,17 +15,6 @@ const craftedItems = {
     'Tear of the Goddess': { 'B.F. Sword': 'Spear of Shojin', 'Chain Vest': 'Protector’s Vow', 'Giant\'s Belt': 'Redemption', 'Needlessly Large Rod': 'Archangel’s Staff', 'Negatron Cloak': 'Adaptive Helm', 'Recurve Bow': 'Statikk Shiv', 'Sparring Gloves': 'Hand of Justice', 'Spatula': 'Mythic Emblem', 'Tear of the Goddess': 'Blue Buff' }
 };
 
-// Adding reverse combinations
-for (let baseItem in craftedItems) {
-    for (let combination in craftedItems[baseItem]) {
-        if (!craftedItems[combination]) {
-            craftedItems[combination] = {};
-        }
-        craftedItems[combination][baseItem] = craftedItems[baseItem][combination];
-    }
-}
-
-// Sanitize function to remove special characters for file mapping
 function sanitize(str) {
     return str.replace(/[^a-zA-Z0-9]/g, '');
 }
